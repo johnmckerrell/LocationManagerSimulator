@@ -1,0 +1,43 @@
+LocationManagerSimulator
+------------------------
+
+John McKerrell
+johnmckerrell.com
+
+This is a basic wrapper for the CLLocationManager class in the
+iPhone SDK CoreLocation framework. It is intended to allow you
+to get real test data into the iPhone Simulator by replaying
+existing GPX files.
+
+Known Issues
+------------
+stopUpdatingLocation does work but when you restart it will
+not start from the same point, it will be as if you continued
+on the journey, which may be correct but I imagine some people
+would prefer if you carried on where you left off.
+
+Might be nice if this was a proper framework instead of a few
+classes that you had to add to your project.
+
+Preparing files
+---------------
+You will need to find or create a GPX file and convert it into
+a plist using the gpx2plist.sh shell script:
+    gpx2plist.sh myfile.gpx myfile.plist
+
+Then add the plist file to your project's resources.
+
+To use.. for now just drag this directory into your project then:
+
+#import "LocationManagerSimulator.h"
+
+...
+
+LocationManagerSimulator *locationManager;
+
+// It is also possible to just use init which will look
+// for a file called "simulated-locations.plist"
+// and multiplier of 1.0
+locationManager = [[LocationManagerSimulator alloc] initWithFilename:@"test-gps" andMultiplier:3.0];
+
+// continue in the normal way.
