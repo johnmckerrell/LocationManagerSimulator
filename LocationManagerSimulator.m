@@ -35,7 +35,6 @@
     return self;
 }
 
-#if TARGET_IPHONE_SIMULATOR
 
 - (void)loadData {
     if( ! filename ) {
@@ -102,7 +101,7 @@
                             altitude:altitude 
                             horizontalAccuracy:hAccuracy 
                             verticalAccuracy:vAccuracy 
-                            timestamp:[dict objectForKey:@"time"]];
+                            timestamp:[NSDate date]];
     return location;
 }
 
@@ -150,6 +149,5 @@
 }
 
 
-#endif
 
 @end
