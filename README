@@ -9,6 +9,13 @@ iPhone SDK CoreLocation framework. It is intended to allow you
 to get real test data into the iPhone Simulator by replaying
 existing GPX files.
 
+I've added stratford.gpx and stratford.plist files which can
+be used as a demo, many more that could be used for testing
+can be found here: http://www.openstreetmap.org/traces
+
+If you find a good demo feel then fork the project add the
+file and push it back to me.
+
 Known Issues
 ------------
 stopUpdatingLocation does work but when you restart it will
