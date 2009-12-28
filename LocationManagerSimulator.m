@@ -35,6 +35,7 @@
     return self;
 }
 
+#if TARGET_IPHONE_SIMULATOR
 
 - (void)loadData {
     if( ! filename ) {
@@ -148,6 +149,6 @@
     }
 }
 
-
+#endif
 
 @end
