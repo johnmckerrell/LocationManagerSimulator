@@ -103,7 +103,7 @@
                             horizontalAccuracy:hAccuracy 
                             verticalAccuracy:vAccuracy 
                             timestamp:[NSDate date]];
-    return location;
+    return [location autorelease];
 }
 
 - (void)calculatePosition {
