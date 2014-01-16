@@ -8,6 +8,10 @@
 
 #import "LocationManagerSimulator.h"
 
+#import "CLLocation+CLExtensions.h"
+
+#define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
+
 // This basically just a random figure found here:
 // http://www.developerfusion.com/article/4652/writing-your-own-gps-applications-part-2/3/
 #define DOP2METERS 6.0
@@ -50,6 +54,10 @@
         NSLog( @"Couldn't load data from %@", fullFilename );
         filename = nil;
     }
+}
+
+- (void)startUpdatingHeading {
+    
 }
 
 - (void)startUpdatingLocation {
@@ -97,12 +105,27 @@
         vAccuracy = DOP2METERS * [[dict objectForKey:@"vdop"] floatValue];
     }
     
+    
     CLLocation *location = [[CLLocation alloc] 
                             initWithCoordinate:coordinate 
                             altitude:altitude 
                             horizontalAccuracy:hAccuracy 
                             verticalAccuracy:vAccuracy 
                             timestamp:[NSDate date]];
+    
+    if (oldLocation) {
+        CLLocationDirection course = [oldLocation bearingInRadiansTowardsLocation:location];
+        course = RADIANS_TO_DEGREES(course);
+        [location autorelease];
+        location = [[CLLocation alloc] initWithCoordinate:coordinate
+                                                 altitude:altitude
+                                       horizontalAccuracy:hAccuracy
+                                         verticalAccuracy:vAccuracy
+                                                   course:course
+                                                    speed:0
+                                                timestamp:[NSDate date]];
+    }
+    
     return [location autorelease];
 }
 
@@ -143,7 +166,12 @@
         }
     }
     if( location ) {
-        [self.delegate locationManager:self didUpdateToLocation:location fromLocation:oldLocation];
+        if ([self.delegate respondsToSelector:@selector(locationManager:didUpdateLocations:)]) {
+            [self.delegate locationManager:self didUpdateLocations:@[location]];
+        }
+        if ([self.delegate respondsToSelector:@selector(locationManager:didUpdateToLocation:fromLocation:)]){
+            [self.delegate locationManager:self didUpdateToLocation:location fromLocation:oldLocation];
+        }
         lastDataIndex = currentDataIndex;
         oldLocation = location;
     }
